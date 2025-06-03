@@ -16,17 +16,17 @@ func MainMenu(userHandler *handler.CustomerHandler) {
 
 	//Menu
 	fmt.Println("1. List Product")
-	fmt.Println("2. Signup")
-	fmt.Println("3. Signin")
+	fmt.Println("2. Login")
+	fmt.Println("3. Register")
 	fmt.Print("Choose Menu : ")
 	fmt.Scan(&numbersMenu)
 
 	switch numbersMenu {
 	case 1:
 	case 2:
-		//TODO : Sign up customer
-		AddUserMenu(userHandler)
 	case 3:
+		//TODO : Register Customer
+		AddUserMenu(userHandler)
 
 	default:
 	}
