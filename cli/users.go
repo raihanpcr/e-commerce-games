@@ -19,22 +19,31 @@ func AddUserMenu(userHandler *handler.CustomerHandler) {
 	reader := bufio.NewReader(os.Stdin)
 	reader.ReadString('\n')
 
-	fmt.Print("Enter your email: ")
-	email, _ := reader.ReadString('\n')
+	var email string
+	for {
+		//input email
+		fmt.Print("Enter your email: ")
+		emailInput, _ := reader.ReadString('\n')
+		email = strings.TrimSpace(emailInput)
 
-	isEmailUnique, err := config.IsEmailUnique(userHandler.DB, email)
+		//cek email apakah sudah digunakan
+		isEmailUnique, err := config.IsEmailUnique(userHandler.DB, email)
 
-	if err != nil {
-		log.Fatal("Database error:", err)
+		if err != nil {
+			log.Fatal("Database error:", err)
+		}
+		if !isEmailUnique {
+			fmt.Println("Email sudah digunakan, coba yang lain.")
+			continue
+		}
+		break
 	}
-	if !isEmailUnique {
-		fmt.Println("Email sudah digunakan, coba yang lain.")
-		// continue
-	}
-
+	
+	//input password
 	fmt.Print("Enter your password: ")
 	password, _ := reader.ReadString('\n')
 
+	//input full_name
 	fmt.Print("Enter your name: ")
 	name, _ := reader.ReadString('\n')
 
@@ -44,7 +53,7 @@ func AddUserMenu(userHandler *handler.CustomerHandler) {
 	fmt.Print("Enter your Address: ")
 	address, _ := reader.ReadString('\n')
 
-	email = strings.TrimSpace(email)
+	
 	password = strings.TrimSpace(password)
 	name = strings.TrimSpace(name)
 	phone = strings.TrimSpace(phone)

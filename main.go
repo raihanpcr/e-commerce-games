@@ -27,8 +27,9 @@ func main() {
 
 	switch numbersMenu {
 	case 1:
-		cli.AddUserMenu(&handler.CustomerHandler{DB: db})
 	case 2:
+		//sign up
+		cli.AddUserMenu(&handler.CustomerHandler{DB: db})
 	case 3:
 
 	default:
