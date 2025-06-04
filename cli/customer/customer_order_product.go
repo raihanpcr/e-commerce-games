@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"e-commerce-games/entity"
 	"e-commerce-games/handler"
+	"e-commerce-games/utils"
 	"fmt"
 	"log"
 	"strings"
@@ -54,15 +55,7 @@ func OrderProduct(customer *handler.CustomerHandler, user *entity.Customer, prod
 				}
 
 				// addToChart
-				subtotal := product.Price * productQuantity
-				cart.OrderItem = append(cart.OrderItem, entity.OrderItem{
-					ProductID: product.ProductID,
-					Quantity:  productQuantity,
-					UnitPrice: product.Price,
-					Subtotal:  subtotal,
-				})
-				cart.CustomerID = user.ID
-				cart.TotalAmount += subtotal
+				utils.AddToCart(&cart, product, productQuantity, user.ID)
 
 				fmt.Println("Order Summary:")
 				for _, item := range cart.OrderItem {
