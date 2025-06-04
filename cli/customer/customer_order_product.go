@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func OrderProduct(customer *handler.CustomerHandler, user entity.Customer, products *handler.ProductHandler, db *sql.DB) {
+func OrderProduct(customer *handler.CustomerHandler, user *entity.Customer, products *handler.ProductHandler, db *sql.DB) {
 	fmt.Println(strings.Repeat("-", 30))
 	fmt.Println("Order Product di E-Commerce Games")
 	fmt.Println(strings.Repeat("-", 30))

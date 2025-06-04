@@ -26,7 +26,7 @@ func MainMenuCustomer(customer *handler.CustomerHandler, user *entity.Customer) 
 
 		switch numbersMenu {
 		case 1:
-			OrderProduct(customer, *user, &handler.ProductHandler{DB: db}, db)
+			OrderProduct(customer, user, &handler.ProductHandler{DB: db}, db)
 		case 2:
 		case 3:
 			fmt.Println(strings.Repeat("-", 30))

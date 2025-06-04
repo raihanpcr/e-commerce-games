@@ -96,5 +96,5 @@ func LoginUser(userHandler *handler.CustomerHandler) {
 		fmt.Println("Login gagal:", err)
 		return
 	}
-	customer.MainMenuCustomer(userHandler, *user)
+	customer.MainMenuCustomer(userHandler, user)
 }
