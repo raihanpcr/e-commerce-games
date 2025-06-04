@@ -1,14 +1,16 @@
 package handler
 
 import (
-	"database/sql"
+	"e-commerce-games/config"
+	"e-commerce-games/entity"
+	"fmt"
 	"log"
 	"strings"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
-type CustomerHandler struct {
-	DB *sql.DB
-}
+
 
 func (h *CustomerHandler) AddCustomer(email, password, fullname, phonenumber, address string){
 
@@ -45,4 +47,33 @@ func (h *CustomerHandler) AddCustomer(email, password, fullname, phonenumber, ad
 	}
 
 	log.Println("Customers berhasil ditambahkan")
+}
+
+func (h *CustomerHandler) Login(email, password string) (*entity.Customer, error){
+	
+	//Get Customer by email
+	user, err := config.GetCustomerWithUser(h.DB, email)
+	// fmt.Println(user, err)
+	if err != nil {
+		return nil, fmt.Errorf("email dan password tidak valid: %w", err)
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.User.Password), []byte(password))
+	// fmt.Println(err)
+	if err != nil {
+		return nil, fmt.Errorf("email dan password tidak valid: %w", err)
+	}
+
+	//Generate JWT
+	token, err := config.GenerateJWT(email, user.User.Role)
+	if err != nil {
+		return nil, fmt.Errorf("gagal generate token: %w", err)
+	}
+
+	err = config.UpdateUserToken(h.DB, email, token)
+	if err != nil {
+		return nil, fmt.Errorf("gagal menyimpan token ke database: %w", err)
+	}
+	fmt.Println("Login Berhasil")
+	return user,nil
 }
