@@ -24,6 +24,8 @@ func MainMenu(userHandler *handler.CustomerHandler) {
 	switch numbersMenu {
 	case 1:
 	case 2:
+		//TODO : Login
+		LoginUser(userHandler)
 	case 3:
 		//TODO : Register Customer
 		AddUserMenu(userHandler)
