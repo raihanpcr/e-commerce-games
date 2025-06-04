@@ -1,6 +1,7 @@
 package config
 
 import (
+	"database/sql"
 	"log"
 	"os"
 	"time"
@@ -29,4 +30,9 @@ func GenerateJWT(email, role string) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(jwtKey)
+}
+
+func ClearUserToken(db *sql.DB, email string) error {
+	_, err := db.Exec(`UPDATE users SET token = NULL WHERE email = ?`, email)
+	return err
 }

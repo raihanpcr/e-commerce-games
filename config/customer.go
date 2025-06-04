@@ -16,7 +16,7 @@ func IsEmailUnique(db *sql.DB, email string) (bool, error) {
 
 func GetCustomerWithUser(db *sql.DB, email string) (*entity.Customer, error)  {
 	query := `SELECT c.customer_id, c.full_name, c.phone_number, c.address, c.user_id,
-	u.user_id, u.password, u.role, u.token
+	u.user_id, u.email, u.password, u.role, u.token
 	FROM customers c
 	JOIN users u ON c.user_id = u.user_id
 	WHERE u.email = ?;`
@@ -28,7 +28,7 @@ func GetCustomerWithUser(db *sql.DB, email string) (*entity.Customer, error)  {
 
 	err := row.Scan(
 		&customer.ID, &customer.Name, &customer.Phone, &customer.Address, &customer.UserID,
-		&user.ID, &user.Password, &user.Role, &user.Token,
+		&user.ID, &user.Email, &user.Password, &user.Role, &user.Token,
 	)
 
 	if err != nil {

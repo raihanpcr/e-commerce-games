@@ -2,6 +2,7 @@ package cli
 
 import (
 	"bufio"
+
 	"e-commerce-games/cli/customer"
 	"e-commerce-games/config"
 	"e-commerce-games/handler"
@@ -96,5 +97,5 @@ func LoginUser(userHandler *handler.CustomerHandler){
 		fmt.Println("Login gagal:", err)
 		return
 	}
-	customer.MainMenuCustomer(userHandler, *user)
+	customer.MainMenuCustomer(userHandler, user)
 }
