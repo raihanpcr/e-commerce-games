@@ -29,6 +29,7 @@ func OrderProduct(customer *handler.CustomerHandler, user *entity.Customer, prod
 		OrderItem:   []entity.OrderItem{},
 		TotalAmount: 0,
 	}
+	var orderID int64
 
 	for {
 		var productID int
@@ -83,11 +84,11 @@ func OrderProduct(customer *handler.CustomerHandler, user *entity.Customer, prod
 		fmt.Scan(&confirm)
 		if confirm == "no" {
 			h := handler.OrderProductHandler{DB: db}
-			// order, err :=
-			h.AddOderProduct(cart) //get order id
-			// if err != nil {
-			// 	return
-			// }
+			order, err := h.AddOderProduct(cart) //get order id
+			if err != nil {
+				return
+			}
+			orderID = order
 			break
 		}
 
@@ -104,6 +105,14 @@ func OrderProduct(customer *handler.CustomerHandler, user *entity.Customer, prod
 
 		if paymentMethod == 1 {
 			// add payment with order id
+			payment := entity.Payment{
+				OrderID:       orderID,
+				PaymentMethod: "COD",
+				PaymentPaid:   cart.TotalAmount,
+			}
+			h := handler.PaymentHandler{DB: db}
+			h.AddPayment(payment)
+
 			fmt.Println("Payment will be made at delivery. Thank you for your order!")
 			break
 		} else if paymentMethod == 2 {
@@ -113,6 +122,14 @@ func OrderProduct(customer *handler.CustomerHandler, user *entity.Customer, prod
 				fmt.Scan(&confirm)
 				if strings.ToLower(confirm) == "yes" {
 					// add payment with order id
+					payment := entity.Payment{
+						OrderID:       orderID,
+						PaymentMethod: "Bank Transfer",
+						PaymentPaid:   cart.TotalAmount,
+					}
+					h := handler.PaymentHandler{DB: db}
+					h.AddPayment(payment)
+
 					fmt.Println("Thank you for your order and payment!")
 					break
 				} else {
