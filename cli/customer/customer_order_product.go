@@ -1,4 +1,4 @@
-package cli
+package customer
 
 import (
 	"database/sql"
@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func OrderProduct(products *handler.ProductHandler, db *sql.DB) {
+func OrderProduct(customer *handler.CustomerHandler, user entity.Customer, products *handler.ProductHandler, db *sql.DB) {
 	fmt.Println(strings.Repeat("-", 30))
 	fmt.Println("Order Product di E-Commerce Games")
 	fmt.Println(strings.Repeat("-", 30))
@@ -60,6 +60,7 @@ func OrderProduct(products *handler.ProductHandler, db *sql.DB) {
 					UnitPrice: product.Price,
 					Subtotal:  subtotal,
 				})
+				cart.CustomerID = user.ID
 				cart.TotalAmount += subtotal
 
 				fmt.Println("Order Summary:")
@@ -128,7 +129,7 @@ func OrderProduct(products *handler.ProductHandler, db *sql.DB) {
 		fmt.Printf("enter 'back' for back to menu: ")
 		fmt.Scan(&confirm)
 		if strings.ToLower(confirm) == "back" {
-			CustomerMenu(db)
+			MainMenuCustomer(customer, user)
 			break
 		} else {
 			fmt.Println("Invalid option!")

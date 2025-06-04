@@ -13,7 +13,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-//Register
+// Register
 func AddUserMenu(userHandler *handler.CustomerHandler) {
 
 	fmt.Println(strings.Repeat("-", 30))
@@ -42,7 +42,7 @@ func AddUserMenu(userHandler *handler.CustomerHandler) {
 		}
 		break
 	}
-	
+
 	//input password
 	fmt.Print("Enter your password: ")
 	password, _ := reader.ReadString('\n')
@@ -57,10 +57,9 @@ func AddUserMenu(userHandler *handler.CustomerHandler) {
 	fmt.Print("Enter your Address: ")
 	address, _ := reader.ReadString('\n')
 
-	
 	password = strings.TrimSpace(password)
 	//Hash password
-	passwordHash,err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
 		log.Fatal("Hash Password is failed", err)
 	}
@@ -71,15 +70,15 @@ func AddUserMenu(userHandler *handler.CustomerHandler) {
 	userHandler.AddCustomer(email, string(passwordHash), name, phone, address)
 }
 
-//Login Menu
-func LoginUser(userHandler *handler.CustomerHandler){
+// Login Menu
+func LoginUser(userHandler *handler.CustomerHandler) {
 
 	fmt.Println(strings.Repeat("-", 30))
 	fmt.Println("Selamat Datang di Menu Login")
 	fmt.Println(strings.Repeat("-", 30))
 
 	reader := bufio.NewReader(os.Stdin)
-	reader.ReadString('\n')
+	// reader.ReadString('\n')
 
 	//input email
 	fmt.Print("Enter your Email: ")

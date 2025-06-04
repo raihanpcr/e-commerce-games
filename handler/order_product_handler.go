@@ -16,7 +16,7 @@ func (h *OrderProductHandler) AddOderProduct(reqOrderProduct entity.OrderProduct
 	now := time.Now().Format("2006-01-02")
 
 	queryOrder := fmt.Sprint("INSERT INTO orders (customer_id,order_date,status,total_amount) VALUES (?,?,?,?)")
-	order, err := h.DB.Exec(queryOrder, 1, now, "unpaid", reqOrderProduct.TotalAmount)
+	order, err := h.DB.Exec(queryOrder, reqOrderProduct.CustomerID, now, "unpaid", reqOrderProduct.TotalAmount)
 	if err != nil {
 		log.Fatal("Store Order failed, ", err)
 		return 0, err
