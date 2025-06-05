@@ -7,3 +7,9 @@ type Product struct {
 	Price       int
 	Stock       int
 }
+
+type BestSellingProduct struct {
+	ProductID   int
+	ProductName string
+	Terjual     int
+}
