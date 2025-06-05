@@ -13,6 +13,7 @@ type OrderItem struct {
 	OrderItemID int
 	OrderID     int
 	ProductID   int
+	Product     Product
 	Quantity    int
 	UnitPrice   int
 	Subtotal    int

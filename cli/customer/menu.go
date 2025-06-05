@@ -28,6 +28,7 @@ func MainMenuCustomer(customer *handler.CustomerHandler, user *entity.Customer) 
 		case 1:
 			OrderProduct(customer, user, &handler.ProductHandler{DB: db}, db)
 		case 2:
+			ListOrderCustomer(customer, user, &handler.OrderProductHandler{DB: db}, db)
 		case 3:
 			fmt.Println(strings.Repeat("-", 30))
 			fmt.Println("Profile Anda")
