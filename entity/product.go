@@ -13,3 +13,9 @@ type BestSellingProduct struct {
 	ProductName string
 	Terjual     int
 }
+
+type MustBeRestockProduct struct {
+	ProductID int
+	Name      string
+	Stock     int
+}

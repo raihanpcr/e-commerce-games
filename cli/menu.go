@@ -11,7 +11,7 @@ func MainMenu(userHandler *handler.CustomerHandler) {
 		var numbersMenu int
 
 		fmt.Println(strings.Repeat("-", 30))
-		fmt.Println("Selemat Data di E-Commerce Games")
+		fmt.Println("Selemat Datang di Sunday Bed Ranger Store")
 		fmt.Println(strings.Repeat("-", 30))
 
 		//Menu

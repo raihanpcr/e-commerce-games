@@ -47,6 +47,43 @@ func (h *ProductHandler) ListProduct() ([]entity.Product, error) {
 	return products, nil
 }
 
+// ================================ Report ========================================
+
+func (h *ProductHandler) ListMustBeRestockProduct() ([]entity.MustBeRestockProduct, error) {
+	query := `
+		SELECT 
+			product_id,
+			name,
+			stock
+		FROM products
+		WHERE stock <= 5
+		ORDER BY stock ASC
+	`
+
+	rows, err := h.DB.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("gagal mengambil produk restock: %w", err)
+	}
+	defer rows.Close()
+
+	var restockProducts []entity.MustBeRestockProduct
+
+	for rows.Next() {
+		var item entity.MustBeRestockProduct
+		if err := rows.Scan(&item.ProductID, &item.Name, &item.Stock); err != nil {
+			log.Printf("gagal scan produk restock: %v\n", err)
+			continue
+		}
+		restockProducts = append(restockProducts, item)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("kesalahan saat membaca hasil: %w", err)
+	}
+
+	return restockProducts, nil
+}
+
 func (h *ProductHandler) ListBestSellingProduct() ([]entity.BestSellingProduct, error) {
 	query := `
 		SELECT 

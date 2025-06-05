@@ -10,10 +10,10 @@ import (
 )
 
 func MainMenuAdmin(customer *handler.CustomerHandler, user *entity.Customer) {
-	
+
 	var numbersMenu int
 	fmt.Println(strings.Repeat("-", 30))
-	fmt.Printf("Selemat Data %s Sunday Bed Ranger Store\n", user.Name)
+	fmt.Printf("Selemat Datang %s Sunday Bed Ranger Store\n", user.Name)
 	for {
 		fmt.Println(strings.Repeat("-", 30))
 		fmt.Println("1. Product")
@@ -25,12 +25,13 @@ func MainMenuAdmin(customer *handler.CustomerHandler, user *entity.Customer) {
 
 		switch numbersMenu {
 		case 1:
+			MenuProduct(customer, user)
 		case 2:
 			orderHandler := handler.OrderHandler{DB: customer.DB}
 
 			orders, err := orderHandler.ListOrder()
 			if err != nil {
-				log.Fatal("Gagal mengambil data order ",err)
+				log.Fatal("Gagal mengambil data order ", err)
 				break
 			}
 			fmt.Println("Data Order Customers")
@@ -49,18 +50,58 @@ func MainMenuAdmin(customer *handler.CustomerHandler, user *entity.Customer) {
 		case 3:
 			fmt.Println(strings.Repeat("-", 30))
 			productHandler := handler.ProductHandler{DB: customer.DB}
+			reportHandler := handler.ReportHandler{DB: customer.DB}
 			var reportNumbers int
 			fmt.Println("1. Stok Product Sedikit")
 			fmt.Println("2. Pendapatan Perbulan")
 			fmt.Println("3. Product yang paling laku")
-			//TODO 
+			//TODO
 			fmt.Println("4. Customer terbanyak Order")
+			fmt.Println("0. Kembali")
 			fmt.Print("Choose Report : ")
 			fmt.Scan(&reportNumbers)
 
 			switch reportNumbers {
 			case 1:
+				products, err := productHandler.ListMustBeRestockProduct()
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				if len(products) == 0 {
+					fmt.Println(strings.Repeat("=", 60))
+					fmt.Println("Belum ada product yang perlu di restock")
+					fmt.Println(strings.Repeat("=", 60))
+					break
+				}
+
+				fmt.Println(strings.Repeat("=", 60))
+				fmt.Printf("| %-10s | %-30s | %-10s |\n", "Product ID", "Product Name", "Stock")
+				fmt.Println(strings.Repeat("=", 60))
+				for _, p := range products {
+					fmt.Printf("| %-10d | %-30s | %-10d |\n", p.ProductID, p.Name, p.Stock)
+				}
+				fmt.Println(strings.Repeat("=", 60))
 			case 2:
+				reportMontlyRevenue, err := reportHandler.MonthlyRevenueReport()
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				if len(reportMontlyRevenue) == 0 {
+					fmt.Println(strings.Repeat("=", 60))
+					fmt.Println("Belum ada data")
+					fmt.Println(strings.Repeat("=", 60))
+					break
+				}
+
+				fmt.Println(strings.Repeat("=", 60))
+				fmt.Printf("| %-10s | %-30s |\n", "Bulan Tahun", "Total")
+				fmt.Println(strings.Repeat("=", 60))
+				for _, rmr := range reportMontlyRevenue {
+					fmt.Printf("| %-10s | %-30d |\n", rmr.MonthYear, rmr.Total)
+				}
+				fmt.Println(strings.Repeat("=", 60))
 			case 3:
 				products, err := productHandler.ListBestSellingProduct()
 				if err != nil {

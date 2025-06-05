@@ -11,7 +11,7 @@ import (
 
 func ListOrderCustomer(customer *handler.CustomerHandler, user *entity.Customer, orderProduct *handler.OrderProductHandler, db *sql.DB) {
 	fmt.Println(strings.Repeat("-", 30))
-	fmt.Println("List Order Customer ", user.Name, " di E-Commerce Games")
+	fmt.Println("List Order Customer ", user.Name, " di Sunday Bed Ranger Store")
 	fmt.Println(strings.Repeat("-", 30))
 
 	// Ambil data order berdasarkan customer
