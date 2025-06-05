@@ -83,7 +83,8 @@ func MenuProduct(customer *handler.CustomerHandler, user *entity.Customer) {
 			productHandler.AddProduct(reqProduct)
 
 		case 0:
-			MainMenuAdmin(customer, user)
+			return
+			// MainMenuAdmin(customer, user)
 		default:
 			fmt.Println("Invalid Input!")
 		}

@@ -49,7 +49,7 @@ func MainMenuCustomer(customer *handler.CustomerHandler, user *entity.Customer) 
 
 			switch isUpdate {
 			case "yes":
-				UpdateProfileCustomer(customer, user.ID)
+				UpdateProfileCustomer(customer, user)
 			case "no":
 				fmt.Println("No changes will be made.")
 			default:

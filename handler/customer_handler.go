@@ -49,7 +49,7 @@ func (h *CustomerHandler) AddCustomer(email, password, fullname, phonenumber, ad
 	log.Println("Customers berhasil ditambahkan")
 }
 
-func (h *CustomerHandler) UpdateCustomer(fullname, phone, address string, id int) error {
+func (h *CustomerHandler) UpdateCustomer(cust *entity.Customer)  error {
 
 	query := `
 		UPDATE customers 
@@ -57,11 +57,23 @@ func (h *CustomerHandler) UpdateCustomer(fullname, phone, address string, id int
 		WHERE customer_id = ?
 	`
 
-	_, err := h.DB.Exec(query, fullname, phone, address, id)
+	_, err := h.DB.Exec(query, cust.Name, cust.Phone, cust.Address, cust.ID)
+	
 	if err != nil {
 		return fmt.Errorf("failed to update customer: %v", err)
 	}
 	
+	query = `
+		SELECT full_name, phone_number, address 
+		FROM customers 
+		WHERE customer_id = ?
+	`
+	row := h.DB.QueryRow(query, cust.ID)
+	err = row.Scan(&cust.Name, &cust.Phone, &cust.Address)
+	if err != nil {
+		return fmt.Errorf("failed to fetch updated customer: %v", err)
+	}
+
 	fmt.Println("Data Sukses Update")
 	return nil
 }
