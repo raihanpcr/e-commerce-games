@@ -3,6 +3,7 @@ package cli
 import (
 	"bufio"
 
+	"e-commerce-games/cli/admin"
 	"e-commerce-games/cli/customer"
 	"e-commerce-games/config"
 	"e-commerce-games/handler"
@@ -79,7 +80,7 @@ func LoginUser(userHandler *handler.CustomerHandler) {
 	fmt.Println(strings.Repeat("-", 30))
 
 	reader := bufio.NewReader(os.Stdin)
-	// reader.ReadString('\n')
+	reader.ReadString('\n')
 
 	//input email
 	fmt.Print("Enter your Email: ")
@@ -96,5 +97,10 @@ func LoginUser(userHandler *handler.CustomerHandler) {
 		fmt.Println("Login gagal:", err)
 		return
 	}
-	customer.MainMenuCustomer(userHandler, user)
+	fmt.Println(user.User.Role)
+	if user.User.Role == "Admin" {
+		admin.MainMenuAdmin(userHandler, user)
+	}else{
+		customer.MainMenuCustomer(userHandler, user)
+	}
 }

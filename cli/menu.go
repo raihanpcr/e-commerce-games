@@ -23,6 +23,26 @@ func MainMenu(userHandler *handler.CustomerHandler) {
 
 		switch numbersMenu {
 		case 1:
+			productHandler := handler.ProductHandler{DB: userHandler.DB}
+
+			products, err := productHandler.ListProduct()
+			if err != nil {
+				fmt.Println("Gagal mengambil data produk:", err)
+				break
+			}
+			fmt.Println("List of Products:")
+			fmt.Println(strings.Repeat("=", 97))
+			fmt.Printf("| %-10s | %-25s | %-30s | %-10s | %-6s |\n",
+				"Product ID", "Product Name", "Description", "Price", "Stock")
+			fmt.Println(strings.Repeat("=", 97))
+
+			for _, p := range products {
+				fmt.Printf("| %-10d | %-25s | %-30s | %-10d | %-6d |\n",
+					p.ProductID, p.Name, p.Description, p.Price, p.Stock)
+			}
+
+			fmt.Println(strings.Repeat("=", 97))
+
 		case 2:
 			//TODO : Login
 			LoginUser(userHandler)

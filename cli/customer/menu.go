@@ -1,10 +1,12 @@
 package customer
 
 import (
+	"bufio"
 	"e-commerce-games/config"
 	"e-commerce-games/entity"
 	"e-commerce-games/handler"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -38,7 +40,21 @@ func MainMenuCustomer(customer *handler.CustomerHandler, user *entity.Customer) 
 			fmt.Println("Customer Address :", user.Address)
 			fmt.Println("Customer Phone :", user.Phone)
 
-			//TODO : Update data customer
+			reader := bufio.NewReader(os.Stdin)
+			reader.ReadString('\n')
+
+			fmt.Print("Update your data (yes/no ): ")
+			isUpdate, _ := reader.ReadString('\n')
+			isUpdate = strings.TrimSpace(isUpdate)
+
+			switch isUpdate {
+			case "yes":
+				UpdateProfileCustomer(customer, user.ID)
+			case "no":
+				fmt.Println("No changes will be made.")
+			default:
+				fmt.Println("Invalid input. Please enter 'yes' or 'no'.")
+			}
 		case 4:
 			//todo : clear token
 			err := config.ClearUserToken(customer.DB, user.User.Email)

@@ -49,6 +49,23 @@ func (h *CustomerHandler) AddCustomer(email, password, fullname, phonenumber, ad
 	log.Println("Customers berhasil ditambahkan")
 }
 
+func (h *CustomerHandler) UpdateCustomer(fullname, phone, address string, id int) error {
+
+	query := `
+		UPDATE customers 
+		SET full_name = ?, phone_number = ?, address = ? 
+		WHERE customer_id = ?
+	`
+
+	_, err := h.DB.Exec(query, fullname, phone, address, id)
+	if err != nil {
+		return fmt.Errorf("failed to update customer: %v", err)
+	}
+	
+	fmt.Println("Data Sukses Update")
+	return nil
+}
+
 func (h *CustomerHandler) Login(email, password string) (*entity.Customer, error){
 	
 	//Get Customer by email
@@ -64,16 +81,18 @@ func (h *CustomerHandler) Login(email, password string) (*entity.Customer, error
 		return nil, fmt.Errorf("email dan password tidak valid: %w", err)
 	}
 
+	
 	//Generate JWT
 	token, err := config.GenerateJWT(email, user.User.Role)
 	if err != nil {
 		return nil, fmt.Errorf("gagal generate token: %w", err)
 	}
-
+	
 	err = config.UpdateUserToken(h.DB, email, token)
 	if err != nil {
 		return nil, fmt.Errorf("gagal menyimpan token ke database: %w", err)
 	}
+	
 	fmt.Println("Login Berhasil")
 	return user,nil
 }
