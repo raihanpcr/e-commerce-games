@@ -80,7 +80,6 @@ func (h *CustomerHandler) Login(email, password string) (*entity.Customer, error
 	if err != nil {
 		return nil, fmt.Errorf("email dan password tidak valid: %w", err)
 	}
-
 	
 	//Generate JWT
 	token, err := config.GenerateJWT(email, user.User.Role)
@@ -88,6 +87,7 @@ func (h *CustomerHandler) Login(email, password string) (*entity.Customer, error
 		return nil, fmt.Errorf("gagal generate token: %w", err)
 	}
 	
+	//Save token
 	err = config.UpdateUserToken(h.DB, email, token)
 	if err != nil {
 		return nil, fmt.Errorf("gagal menyimpan token ke database: %w", err)
@@ -95,4 +95,41 @@ func (h *CustomerHandler) Login(email, password string) (*entity.Customer, error
 	
 	fmt.Println("Login Berhasil")
 	return user,nil
+}
+
+func (h *CustomerHandler) ListTopCustomers() ([]entity.MostOrderCustomer, error) {
+	query := `
+		SELECT 
+			c.customer_id,
+			c.full_name AS customer_name,
+			COUNT(o.order_id) AS total_orders
+		FROM customers c
+		JOIN orders o ON c.customer_id = o.customer_id
+		GROUP BY c.customer_id, c.full_name
+		ORDER BY total_orders DESC
+		LIMIT 3
+	`
+
+	rows, err := h.DB.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("gagal mengambil data customer: %w", err)
+	}
+	defer rows.Close()
+
+	var topCustomers []entity.MostOrderCustomer
+
+	for rows.Next() {
+		var c entity.MostOrderCustomer
+		if err := rows.Scan(&c.CustomerID, &c.CustomerName, &c.TotalOrders); err != nil {
+			log.Printf("gagal scan data customer: %v", err)
+			continue
+		}
+		topCustomers = append(topCustomers, c)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error saat membaca baris: %w", err)
+	}
+
+	return topCustomers, nil
 }

@@ -8,3 +8,9 @@ type Customer struct {
 	UserID  int
 	User    *User
 }
+
+type MostOrderCustomer struct {
+	CustomerID   int
+	CustomerName string
+	TotalOrders  int
+}

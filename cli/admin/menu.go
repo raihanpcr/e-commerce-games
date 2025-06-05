@@ -49,6 +49,8 @@ func MainMenuAdmin(customer *handler.CustomerHandler, user *entity.Customer) {
 		case 3:
 			fmt.Println(strings.Repeat("-", 30))
 			productHandler := handler.ProductHandler{DB: customer.DB}
+
+			customerHandler := handler.CustomerHandler{DB: customer.DB}
 			var reportNumbers int
 			fmt.Println("1. Stok Product Sedikit")
 			fmt.Println("2. Pendapatan Perbulan")
@@ -74,6 +76,19 @@ func MainMenuAdmin(customer *handler.CustomerHandler, user *entity.Customer) {
 					fmt.Printf("| %-10d | %-30s | %-10d |\n", p.ProductID, p.ProductName, p.Terjual)
 				}
 				fmt.Println(strings.Repeat("=", 60))
+			case 4:
+				customers, err := customerHandler.ListTopCustomers()
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				fmt.Println(strings.Repeat("=", 65))
+				fmt.Printf("| %-12s | %-30s | %-12s |\n", "Customer ID", "Customer Name", "Total Orders")
+				fmt.Println(strings.Repeat("=", 65))
+				for _, c := range customers {
+					fmt.Printf("| %-12d | %-30s | %-12d |\n", c.CustomerID, c.CustomerName, c.TotalOrders)
+				}
+				fmt.Println(strings.Repeat("=", 65))
 			}
 		case 4:
 			err := config.ClearUserToken(customer.DB, user.User.Email)
